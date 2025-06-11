@@ -2,6 +2,11 @@
   "name": "fcc-learn-npm-package-json",
   "author": "Franco Galfre",
   "description": "This project is for a freeCodeCamp challenge to learn about backend",
+  "keywords": [
+    "freecodecamp",
+    "npm",
+    "package.json"
+  ],
   "dependencies": {
     "express": "^4.14.0"
   },
