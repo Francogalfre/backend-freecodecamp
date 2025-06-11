@@ -1,23 +1,15 @@
 {
-  "version": "1.0.0",
-  "name": "fcc-learn-npm-package-json",
-  "author": "Franco Galfre",
-  "description": "This project is for a freeCodeCamp challenge to learn about backend",
-  "keywords": [
-    "freecodecamp",
-    "npm",
-    "package.json"
-  ],
-  "license": "MIT",
+  "name": "fcc-learn-node-with-express",
+  "version": "0.1.0",
   "dependencies": {
-    "express": "^4.14.0"
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.14.0",
+    "fcc-express-bground": "https://github.com/freeCodeCamp/fcc-express-bground-pkg.git"
   },
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/freeCodeCamp/boilerplate-npm.git"
   }
 }
