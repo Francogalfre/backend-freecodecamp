@@ -1,17 +1,46 @@
-/* the 'body' selector is required for the tests to pass */
-/* You can change the style attributes if you want */
+/****** Main Styling ******/
+
 body {
-  background-color: #222;
-  color: #ddd;
-  text-align: center;
-  font-family: sans-serif;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	color: #222;
+	background-color: #FaFaFa;
+	text-align: center;
+	line-height: 1.4em;
 }
 
-h1 {
-  font-size: 4em;
+.container {
+	padding: 0;
+	margin-top: 40px;
 }
 
-input[type="text"],
-label {
-  margin-bottom: 8px;
+h3 {
+  margin-top: 30px;
+}
+
+hr {
+	margin: 25px;
+}
+
+.footer {
+	margin-top: 40px;
+}
+
+code {
+  font-family: monospace;
+  padding: 2px;
+  color: black;
+  background-color: #fff;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+a {
+	color: #2574A9;
 }
