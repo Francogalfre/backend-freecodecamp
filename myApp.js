@@ -28,8 +28,8 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/name", (req, res) => {
-  const name = req.query.firstname;
-  const lastname = req.query.lastname;
+  const name = req.query.firstn;
+  const lastname = req.query.last;
 
   if (!name || !lastname) {
     res.json({ error: "Please provide both firstname and lastname" });
