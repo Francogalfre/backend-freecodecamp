@@ -28,7 +28,7 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/name", (req, res) => {
-  const name = req.query.firstn;
+  const name = req.query.first;
   const lastname = req.query.last;
 
   if (!name || !lastname) {
