@@ -28,12 +28,19 @@ const createAndSavePerson = (done) => {
   const person = new Person({
     name: "Franco",
     age: 18,
-    favoriteFoods: ["Asad", "Hamburguesa", "Pizza"],
+    favoriteFoods: ["Asado", "Hamburguesa", "Pizza"],
   });
 
+  console.log(person);
+
   person.save((err, data) => {
-    if (err) return done(err);
-    done(null, data);
+    if (err) {
+      console.log(err);
+      return done(err);
+    } else {
+      console.log(data);
+      done(null, data);
+    }
   });
 };
 
