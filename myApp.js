@@ -10,7 +10,7 @@ app.use("/", (req, _res, next) => {
   next();
 });
 
-app.use(
+app.get(
   "/now",
   (req, _res, next) => {
     const time = new Date().toString();
