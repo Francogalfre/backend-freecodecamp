@@ -43,6 +43,19 @@ app.get("/name", (req, res) => {
   }
 });
 
+app.post("/name", (req, res) => {
+  if (!req.body) {
+    res.json({ error: "Please provide both firstname and lastname" });
+  } else {
+    console.log(req.body.first, req.body.last);
+
+    const name = req.body.first;
+    const lastname = req.body.last;
+
+    res.json({ name: `${name} ${lastname}` });
+  }
+});
+
 app.get("/json", (_req, res) => {
   const textStyle = process.env.MESSAGE_STYLE;
 
