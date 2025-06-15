@@ -1,9 +1,15 @@
 let express = require("express");
+
 require("dotenv").config();
+require("body-parser");
 
 let app = express();
 
 app.use("/public", express.static(__dirname + "/public"));
+app.use("/", (_req, _res, next) => {
+  bodyParser.urlencoded({ extended: false });
+  next();
+});
 
 app.use("/", (req, _res, next) => {
   console.log(req.method + " " + req.path + " - " + req.ip);
