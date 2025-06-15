@@ -10,6 +10,6 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "node --watch myApp.js"
+    "start": "node --watch server.js"
   }
 }
