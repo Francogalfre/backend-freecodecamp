@@ -4,10 +4,17 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Conectado a MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error de conexión:", err);
+  });
 
 const personSchema = new Schema({
   name: { type: String, required: true },
@@ -18,13 +25,13 @@ const personSchema = new Schema({
 const Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
-  const franco = new Person({
+  const person = new Person({
     name: "Franco",
     age: 18,
-    favoriteFoods: ["Asad", "Hamburguesa", "Pastas"],
+    favoriteFoods: ["Asad", "Hamburguesa", "Pizza"],
   });
 
-  franco.save((err, data) => {
+  person.save((err, data) => {
     if (err) return done(err);
     done(null, data);
   });
