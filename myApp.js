@@ -28,6 +28,8 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/name", (req, res) => {
+  console.log(req.query);
+
   const name = req.query.first;
   const lastname = req.query.last;
 
