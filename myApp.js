@@ -27,6 +27,17 @@ app.get("/", (_req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/name", (req, res) => {
+  const name = req.query.firstname;
+  const lastname = req.query.lastname;
+
+  if (!name || !lastname) {
+    res.json({ error: "Please provide both firstname and lastname" });
+  } else {
+    res.json({ name: `${name} ${lastname}` });
+  }
+});
+
 app.get("/json", (_req, res) => {
   const textStyle = process.env.MESSAGE_STYLE;
 
