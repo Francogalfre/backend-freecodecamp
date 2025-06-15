@@ -1,9 +1,21 @@
-require("dotenv").config();
-let moongose = require("mongoose");
+import "dotenv/config";
 
-moongose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+import mongoose from "mongoose";
 
-let Person;
+const { Schema } = mongoose;
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const personSchema = new Schema({
+  name: { type: String, required: true },
+  age: Number,
+  favoriteFoods: [String],
+});
+
+const Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
   done(null /*, data*/);
@@ -59,14 +71,14 @@ const queryChain = (done) => {
 
 //----- **DO NOT EDIT BELOW THIS LINE** ----------------------------------
 
-exports.PersonModel = Person;
-exports.createAndSavePerson = createAndSavePerson;
-exports.findPeopleByName = findPeopleByName;
-exports.findOneByFood = findOneByFood;
-exports.findPersonById = findPersonById;
-exports.findEditThenSave = findEditThenSave;
-exports.findAndUpdate = findAndUpdate;
-exports.createManyPeople = createManyPeople;
-exports.removeById = removeById;
-exports.removeManyPeople = removeManyPeople;
-exports.queryChain = queryChain;
+export { Person as PersonModel };
+export { createAndSavePerson };
+export { findPeopleByName };
+export { findOneByFood };
+export { findPersonById };
+export { findEditThenSave };
+export { findAndUpdate };
+export { createManyPeople };
+export { removeById };
+export { removeManyPeople };
+export { queryChain };
