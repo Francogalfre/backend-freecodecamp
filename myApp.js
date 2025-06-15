@@ -1,74 +1,72 @@
-let express = require("express");
-let bodyParser = require("body-parser");
-
 require("dotenv").config();
+let moongose = require("mongoose");
 
-let app = express();
+moongose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.use("/public", express.static(__dirname + "/public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+let Person;
 
-app.use("/", (req, _res, next) => {
-  console.log(req.method + " " + req.path + " - " + req.ip);
-  next();
-});
+const createAndSavePerson = (done) => {
+  done(null /*, data*/);
+};
 
-app.get(
-  "/now",
-  (req, _res, next) => {
-    const time = new Date().toString();
-    req.time = time;
-    next();
-  },
-  function (req, res) {
-    res.json({ time: req.time });
-  }
-);
+const createManyPeople = (arrayOfPeople, done) => {
+  done(null /*, data*/);
+};
 
-app.get("/", (_req, res) => {
-  console.log("Hello Express");
-  res.sendFile(__dirname + "/views/index.html");
-});
+const findPeopleByName = (personName, done) => {
+  done(null /*, data*/);
+};
 
-app.get("/name", (req, res) => {
-  console.log(req.query);
+const findOneByFood = (food, done) => {
+  done(null /*, data*/);
+};
 
-  const name = req.query.first;
-  const lastname = req.query.last;
+const findPersonById = (personId, done) => {
+  done(null /*, data*/);
+};
 
-  if (!name || !lastname) {
-    res.json({ error: "Please provide both firstname and lastname" });
-  } else {
-    res.json({ name: `${name} ${lastname}` });
-  }
-});
+const findEditThenSave = (personId, done) => {
+  const foodToAdd = "hamburger";
 
-app.post("/name", (req, res) => {
-  if (!req.body) {
-    res.json({ error: "Please provide both firstname and lastname" });
-  } else {
-    console.log(req.body.first, req.body.last);
+  done(null /*, data*/);
+};
 
-    const name = req.body.first;
-    const lastname = req.body.last;
+const findAndUpdate = (personName, done) => {
+  const ageToSet = 20;
 
-    res.json({ name: `${name} ${lastname}` });
-  }
-});
+  done(null /*, data*/);
+};
 
-app.get("/json", (_req, res) => {
-  const textStyle = process.env.MESSAGE_STYLE;
+const removeById = (personId, done) => {
+  done(null /*, data*/);
+};
 
-  if (textStyle == "uppercase") {
-    res.json({ message: "Hello Json".toUpperCase() });
-  } else {
-    res.json({ message: "Hello Json" });
-  }
-});
+const removeManyPeople = (done) => {
+  const nameToRemove = "Mary";
 
-app.get("/:word/echo", (req, res) => {
-  const word = req.params.word;
-  res.json({ echo: word });
-});
+  done(null /*, data*/);
+};
 
-module.exports = app;
+const queryChain = (done) => {
+  const foodToSearch = "burrito";
+
+  done(null /*, data*/);
+};
+
+/** **Well Done !!**
+/* You completed these challenges, let's go celebrate !
+ */
+
+//----- **DO NOT EDIT BELOW THIS LINE** ----------------------------------
+
+exports.PersonModel = Person;
+exports.createAndSavePerson = createAndSavePerson;
+exports.findPeopleByName = findPeopleByName;
+exports.findOneByFood = findOneByFood;
+exports.findPersonById = findPersonById;
+exports.findEditThenSave = findEditThenSave;
+exports.findAndUpdate = findAndUpdate;
+exports.createManyPeople = createManyPeople;
+exports.removeById = removeById;
+exports.removeManyPeople = removeManyPeople;
+exports.queryChain = queryChain;
