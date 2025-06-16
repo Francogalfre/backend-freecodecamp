@@ -20,7 +20,7 @@ app.get("/api/whoami", (req, res) => {
 
   console.log(req.headers);
 
-  res.json({ ipadress: ipaddress, language: language, software: software });
+  res.json({ ipaddress: ipaddress, language: language, software: software });
 });
 
 var listener = app.listen(process.env.PORT || 3000, function () {
