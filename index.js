@@ -1,11 +1,7 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import "dotenv/config";
 
 const app = express();
 
@@ -17,37 +13,14 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-app.get("/api/:date?", (req, res) => {
-  const dateParams = req.params.date;
+app.get("/api/whoami", (req, res) => {
+  const ipaddress = req.ip;
+  const language = req.headers["accept-language"];
+  const software = req.headers["user-agent"];
 
-  if (dateParams == undefined) {
-    res.json({
-      unix: Date.now(),
-      utc: new Date().toUTCString(),
-    });
-  } else {
-    let date;
-
-    if (!isNaN(dateParams)) {
-      date = new Date(parseInt(dateParams));
-    } else {
-      date = new Date(dateParams);
-    }
-
-    if (date.toString() == "Invalid Date") {
-      res.json({ error: "Invalid Date" });
-    } else {
-      const unixDate = date.getTime();
-      const utcDate = date.toUTCString();
-
-      res.json({
-        unix: unixDate,
-        utc: utcDate,
-      });
-    }
-  }
+  res.json({ ipadress: ipaddress, language: language, software: software });
 });
 
-const listener = app.listen(process.env.PORT || 3000, function () {
+var listener = app.listen(process.env.PORT || 3000, function () {
   console.log("Your app is listening on port " + listener.address().port);
 });
