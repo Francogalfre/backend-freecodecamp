@@ -103,13 +103,10 @@ const findPersonById = (personId, done) => {
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
 
-  const person = Person.findById(personId, (err, data) => {
+  Person.findById(personId, (err, person) => {
     if (err) {
       console.log(err);
       return done(err);
-    } else {
-      console.log(data);
-      done(null, data);
     }
 
     person.favoriteFoods.push(foodToAdd);
