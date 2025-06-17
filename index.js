@@ -32,8 +32,8 @@ app.post("/api/users", (req, res) => {
   } else {
     const id = users.length + 1;
 
-    users.push({ username: username, _id: id });
-    res.json({ username, _id: id });
+    users.push({ _id: id, username: username });
+    res.json({ _id: id, username });
   }
 });
 
