@@ -1,66 +1,100 @@
 import express from "express";
 import cors from "cors";
-import dns from "node:dns";
+
+import path from "path";
+import { fileURLToPath } from "url";
 
 import "dotenv/config";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(cors());
 
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
-app.use("/public", express.static(`${process.cwd()}/public`));
-
-app.get("/", function (_req, res) {
-  res.sendFile(process.cwd() + "/views/index.html");
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
 });
 
-const urls = [];
+const users = [];
+const exercises = [];
 
-app.post("/api/shorturl", function (req, res) {
-  const originalUrl = req.body.url;
+app.post("/api/users", (req, res) => {
+  const username = req.body.username;
 
-  if (!originalUrl) {
-    res.json({ error: "Invalid URL" });
+  if (!username) {
+    res.json({ error: "Username is required" });
+  } else {
+    const id = users.length + 1;
+
+    users.push({ id, username });
+    res.json({ username, _id: id });
+  }
+});
+
+app.get("/api/users", (_req, res) => {
+  if (users.length > 0) {
+    res.json(users);
+  } else {
+    res.json({ error: "No users created yet" });
+  }
+});
+
+app.post("/api/users/:_id/exercises", (req, res) => {
+  const userId = req.params._id;
+  const description = req.body.description;
+  const duration = parseInt(req.body.duration);
+  const date = new Date(req.body.date || Date.now()).toDateString();
+
+  const user = users.find((user) => user.id === parseInt(userId));
+
+  if (!user) {
+    return res.json({ error: "User not found" });
   }
 
-  let urlObject;
+  const exercise = {
+    id: user.id,
+    date: date,
+    duration: duration,
+    description: description,
+  };
 
-  try {
-    urlObject = new URL(originalUrl);
-  } catch {
-    return res.json({ error: "Invalid URL" });
-  }
+  exercises.push(exercise);
 
-  dns.lookup(urlObject.hostname, (err) => {
-    if (err) {
-      res.json({ error: "Invalid URL" });
-    } else {
-      const shortUrl = urls.length + 1;
-      urls.push({ originalUrl, shortUrl });
-
-      res.json({
-        original_url: originalUrl,
-        short_url: shortUrl,
-      });
-    }
+  res.json({
+    _id: user.id,
+    username: user.username,
+    date: date,
+    duration: duration,
+    description: description,
   });
 });
 
-app.get("/api/shorturl/:shortUrl", (req, res) => {
-  const shortUrl = req.params.shortUrl;
-  const url = urls.find((url) => url.shortUrl == shortUrl);
+app.get("/api/users/:_id/logs", (req, res) => {
+  const userId = req.params._id;
 
-  if (url) {
-    res.redirect(url.originalUrl);
+  const userExercises = [];
+
+  const user = users.find((user) => user.id == userId);
+
+  if (!user) {
+    res.json({ error: "User not found" });
   } else {
-    res.json({ error: "No short URL found for the given input" });
+    userExercises.push(exercises.find((exercise) => exercise.id == user.id));
   }
+
+  res.json({
+    _id: user.id,
+    username: user.username,
+    count: userExercises.length,
+    log: userExercises,
+  });
 });
 
-app.listen(port, function () {
-  console.log(`Listening on port ${port}`);
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log("Your app is listening on port " + listener.address().port);
 });
