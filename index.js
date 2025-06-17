@@ -30,7 +30,7 @@ app.post("/api/users", (req, res) => {
   if (!username) {
     res.json({ error: "Username is required" });
   } else {
-    const id = crypto.randomUUID();
+    const id = Date.now().toString();
 
     users.push({ _id: id, username: username });
     res.json({ _id: id, username });
@@ -47,7 +47,7 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   const duration = parseInt(req.body.duration);
   const date = new Date(req.body.date || Date.now()).toDateString();
 
-  const user = users.find((user) => user._id === parseInt(userId));
+  const user = users.find((user) => user._id === userId);
 
   if (!user) {
     return res.json({ error: "User not found" });
@@ -75,7 +75,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
   const userId = req.params._id;
   const { from, to, limit } = req.query;
 
-  const user = users.find((user) => user._id == userId);
+  const user = users.find((user) => user._id === userId);
 
   let userExercises;
 
