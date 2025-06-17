@@ -1,28 +1,66 @@
-import cors from "cors";
 import express from "express";
+import cors from "cors";
+import dns from "node:dns";
 
 import "dotenv/config";
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(cors({ optionsSuccessStatus: 200 }));
+app.use(cors());
 
-app.use(express.static("public"));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/views/index.html");
+app.use("/public", express.static(`${process.cwd()}/public`));
+
+app.get("/", function (_req, res) {
+  res.sendFile(process.cwd() + "/views/index.html");
 });
 
-app.get("/api/whoami", (req, res) => {
-  const ipaddress = req.socket.remoteAddress || req.ip;
-  const language = req.headers["accept-language"];
-  const software = req.headers["user-agent"];
+const urls = [];
 
-  console.log(req.headers);
+app.post("/api/shorturl", function (req, res) {
+  const originalUrl = req.body.url;
 
-  res.json({ ipaddress: ipaddress, language: language, software: software });
+  if (!originalUrl) {
+    res.json({ error: "Invalid URL" });
+  }
+
+  let urlObject;
+
+  try {
+    urlObject = new URL(originalUrl);
+  } catch {
+    return res.json({ error: "Invalid URL" });
+  }
+
+  dns.lookup(urlObject.hostname, (err) => {
+    if (err) {
+      res.json({ error: "Invalid URL" });
+    } else {
+      const shortUrl = urls.length + 1;
+      urls.push({ originalUrl, shortUrl });
+
+      res.json({
+        original_url: originalUrl,
+        short_url: shortUrl,
+      });
+    }
+  });
 });
 
-var listener = app.listen(process.env.PORT || 3000, function () {
-  console.log("Your app is listening on port " + listener.address().port);
+app.get("/api/shorturl/:shortUrl", (req, res) => {
+  const shortUrl = req.params.shortUrl;
+  const url = urls.find((url) => url.shortUrl == shortUrl);
+
+  if (url) {
+    res.redirect(url.originalUrl);
+  } else {
+    res.json({ error: "No short URL found for the given input" });
+  }
+});
+
+app.listen(port, function () {
+  console.log(`Listening on port ${port}`);
 });
