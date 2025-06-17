@@ -32,17 +32,13 @@ app.post("/api/users", (req, res) => {
   } else {
     const id = users.length + 1;
 
-    users.push({ id, username });
+    users.push({ username: username, _id: id });
     res.json({ username, _id: id });
   }
 });
 
 app.get("/api/users", (_req, res) => {
-  if (users.length > 0) {
-    res.json(users);
-  } else {
-    res.json({ error: "No users created yet" });
-  }
+  res.json(users);
 });
 
 app.post("/api/users/:_id/exercises", (req, res) => {
@@ -51,14 +47,14 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   const duration = parseInt(req.body.duration);
   const date = new Date(req.body.date || Date.now()).toDateString();
 
-  const user = users.find((user) => user.id === parseInt(userId));
+  const user = users.find((user) => user._id === parseInt(userId));
 
   if (!user) {
     return res.json({ error: "User not found" });
   }
 
   const exercise = {
-    id: user.id,
+    id: user._id,
     date: date,
     duration: duration,
     description: description,
@@ -67,7 +63,7 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   exercises.push(exercise);
 
   res.json({
-    _id: user.id,
+    _id: user._id,
     username: user.username,
     date: date,
     duration: duration,
@@ -77,19 +73,34 @@ app.post("/api/users/:_id/exercises", (req, res) => {
 
 app.get("/api/users/:_id/logs", (req, res) => {
   const userId = req.params._id;
+  const { from, to, limit } = req.query;
 
-  const userExercises = [];
+  const user = users.find((user) => user._id == userId);
 
-  const user = users.find((user) => user.id == userId);
+  let userExercises;
 
   if (!user) {
     res.json({ error: "User not found" });
   } else {
-    userExercises.push(exercises.find((exercise) => exercise.id == user.id));
+    userExercises = exercises.filter((exercise) => exercise.id == user._id);
+  }
+
+  if (from) {
+    const fromDate = new Date(from);
+    userExercises = userExercises.filter((exercise) => new Date(exercise.date) >= fromDate);
+  }
+
+  if (to) {
+    const toDate = new Date(to);
+    userExercises = userExercises.filter((exercise) => new Date(exercise.date) <= toDate);
+  }
+
+  if (limit) {
+    userExercises = userExercises.slice(0, parseInt(limit));
   }
 
   res.json({
-    _id: user.id,
+    _id: user._id,
     username: user.username,
     count: userExercises.length,
     log: userExercises,
