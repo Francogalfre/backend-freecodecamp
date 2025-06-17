@@ -30,7 +30,7 @@ app.post("/api/users", (req, res) => {
   if (!username) {
     res.json({ error: "Username is required" });
   } else {
-    const id = users.length + 1;
+    const id = crypto.randomUUID();
 
     users.push({ _id: id, username: username });
     res.json({ _id: id, username });
